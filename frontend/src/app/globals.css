@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+:root {
+  --ink: #0f172a;
+  --ink-muted: #475569;
+  --ink-faint: #94a3b8;
+  --line: rgba(15, 23, 42, 0.1);
+  --surface: #f3f7f8;
+  --surface-soft: #eef5f4;
+  --accent: #0f766e;
+  --accent-strong: #115e59;
+  --accent-soft: rgba(15, 118, 110, 0.12);
+  --background: #eef4f3;
+  --foreground: #0f172a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+.page-shell {
+  background:
+    radial-gradient(circle at 12% 18%, rgba(45, 212, 191, 0.18), transparent 28%),
+    radial-gradient(circle at 88% 8%, rgba(14, 116, 144, 0.14), transparent 26%),
+    radial-gradient(circle at 70% 78%, rgba(15, 118, 110, 0.1), transparent 30%),
+    linear-gradient(180deg, #f7fbfb 0%, #eef4f3 48%, #e8f1ef 100%);
+}
+
+.hero-glow {
+  animation: floatGlow 8s ease-in-out infinite;
+}
+
+.fade-up {
+  animation: fadeUp 0.7s ease both;
+}
+
+.fade-up-delay {
+  animation: fadeUp 0.85s ease 0.12s both;
+}
+
+.fade-up-delay-2 {
+  animation: fadeUp 0.9s ease 0.22s both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatGlow {
+  0%,
+  100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-12px) scale(1.03);
+  }
+}

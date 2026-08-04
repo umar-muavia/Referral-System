@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  password     String
+  referralCode String   @unique @map("referral_code")
+  points       Int      @default(0)
+
+  /// User who referred this account (null if signed up without a code)
+  referredById String?  @map("referred_by_id")
+  referredBy   User?    @relation("UserReferrals", fields: [referredById], references: [id], onDelete: SetNull)
+  referrals    User[]   @relation("UserReferrals")
+
+  /// Audit trail of referrals this user made / received
+  referralsMade     Referral[] @relation("ReferralsMade")
+  referralReceived  Referral?  @relation("ReferralReceived")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([referralCode])
+  @@index([referredById])
+  @@map("users")
+}
+
+/// Immutable record of a successful referral + points awarded
+model Referral {
+  id            String @id @default(cuid())
+  referrerId    String @map("referrer_id")
+  referredId    String @unique @map("referred_id")
+  pointsAwarded Int    @default(10) @map("points_awarded")
+
+  referrer User @relation("ReferralsMade", fields: [referrerId], references: [id], onDelete: Cascade)
+  referred User @relation("ReferralReceived", fields: [referredId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([referrerId])
+  @@map("referrals")
+}
